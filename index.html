@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flashcards de Termodinâmica</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <span class="badge">Física • Termodinâmica</span>
+      <h1>Flashcards de Termodinâmica</h1>
+      <p class="subtitle">Clique no cartão para revelar a resposta ou fórmula.</p>
+    </header>
+
+    <section class="deck-info">
+      <span id="counter">Cartão 1 de 3</span>
+    </section>
+
+    <div class="scene">
+      <div class="card" id="flashcard" role="button" tabindex="0" aria-label="Virar flashcard">
+        <div class="card-face card-front">
+          <span class="tag" id="front-tag">1ª Lei</span>
+          <img id="card-image" class="card-img" src="" alt="" />
+          <h2 id="question">Carregando...</h2>
+          <span class="hint">Clique para virar</span>
+        </div>
+
+        <div class="card-face card-back">
+          <span class="tag tag-back" id="back-tag">Resposta</span>
+          <h3 id="answer-title"></h3>
+          <p id="answer-text"></p>
+          <div class="formula-box" id="formula"></div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="controls">
+      <button type="button" id="prev-btn" class="btn">← Anterior</button>
+      <button type="button" id="flip-btn" class="btn btn-primary">Virar cartão</button>
+      <button type="button" id="next-btn" class="btn">Próximo →</button>
+    </nav>
+  </main>
+
+  <script>
+    const cards = [
+      {
+        tag: "Máquinas Térmicas",
+        image: "https://s3.static.brasilescola.uol.com.br/img/2019/10/maquina-termica-imagem-principal.jpg",
+        imageAlt: "Diagrama de máquina térmica com fonte quente, trabalho e fonte fria",
+        question: "Como funciona uma máquina térmica segundo a 2ª Lei da Termodinâmica?",
+        answerTitle: "Conversão parcial de calor em trabalho",
+        answerText: "Ela retira calor de uma fonte quente, converte parte em trabalho mecânico e rejeita obrigatoriamente uma parcela para uma fonte fria (nenhuma máquina tem 100% de rendimento).",
+        formula: "η = 1 - (|Qf| / |Qq|)"
+      },
+      {
+        tag: "Entropia e Diagrama T-s",
+        image: "https://thermal-engineering.org/wp-content/uploads/2019/05/Specific-Entropy-T-s-Diagram.png",
+        imageAlt: "Diagrama Temperatura versus Entropia específica",
+        question: "O que representa a entropia (S) e o que mostra um diagrama T-s?",
+        answerTitle: "Medida de irreversibilidade e dispersão de energia",
+        answerText: "A entropia indica o grau de desordem/dispersão energética de um sistema. Em um diagrama Temperatura x Entropia (T-s), a área sob uma curva reversível representa a troca de calor.",
+        formula: "ΔS ≥ ∫ (δQ / T)"
+      },
+      {
+        tag: "1ª Lei da Termodinâmica",
+        image: "https://s3.static.brasilescola.uol.com.br/img/2019/10/maquina-termica-imagem-principal.jpg",
+        imageAlt: "Fluxo de energia térmica e trabalho",
+        question: "Como se relaciona a variação da energia interna (ΔU), o calor (Q) e o trabalho (τ)?",
+        answerTitle: "Conservação da energia",
+        answerText: "A variação da energia interna de um sistema é igual ao calor líquido trocado menos o trabalho realizado pelo sistema (adotando τ > 0 na expansão).",
+        formula: "ΔU = Q - τ"
+      }
+    ];
+
+    let currentIndex = 0;
+    const flashcard = document.getElementById("flashcard");
+    const counter = document.getElementById("counter");
+    const frontTag = document.getElementById("front-tag");
+    const cardImage = document.getElementById("card-image");
+    const questionEl = document.getElementById("question");
+    const backTag = document.getElementById("back-tag");
+    const answerTitleEl = document.getElementById("answer-title");
+    const answerTextEl = document.getElementById("answer-text");
+    const formulaEl = document.getElementById("formula");
+
+    function renderCard() {
+      flashcard.classList.remove("is-flipped");
+      const item = cards[currentIndex];
+      counter.textContent = `Cartão ${currentIndex + 1} de ${cards.length}`;
+      frontTag.textContent = item.tag;
+      backTag.textContent = item.tag;
+      cardImage.src = item.image;
+      cardImage.alt = item.imageAlt;
+      questionEl.textContent = item.question;
+      answerTitleEl.textContent = item.answerTitle;
+      answerTextEl.textContent = item.answerText;
+      formulaEl.textContent = item.formula;
+    }
+
+    function toggleFlip() {
+      flashcard.classList.toggle("is-flipped");
+    }
+
+    document.getElementById("flip-btn").addEventListener("click", toggleFlip);
+    flashcard.addEventListener("click", toggleFlip);
+    flashcard.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleFlip();
+      }
+    });
+
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+      renderCard();
+    });
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      currentIndex = (currentIndex + 1) % cards.length;
+      renderCard();
+    });
+
+    renderCard();
+  </script>
+</body>
+</html>
